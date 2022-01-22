@@ -8,7 +8,7 @@
 
     MIT License
 """
-import re
+
 import requests
 import wikipedia
 from wikidata.client import Client
@@ -39,7 +39,8 @@ def get_wikidata_id_for_title(title: str):
 
     R = S.get(url=URL, params=PARAMS)
 
-    return R.text.split('wikibase_item":"')[1].split('"')[0]
+
+SEARCHPAGE = "Nelson Mandela"
 
 
 def get_wikidata_properties_for_id(id: str):
@@ -90,6 +91,9 @@ wikidata_conversions = {
 
 }
 
+R = S.get(url=URL, params=PARAMS)
+DATA = R.json()
+
 
 def SearchPhrase(phrase):
 
@@ -132,6 +136,8 @@ def SearchPhrase(phrase):
 
     return summary
 
+
+print(results)
 
 if __name__ == "__main__":
     SearchPhrase("nelson mandella death")
