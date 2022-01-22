@@ -8,13 +8,13 @@
 
     MIT License
 """
-
+import re
 import requests
 import wikipedia
 from wikidata.client import Client
-from nltk.stem.wordnet import WordNetLemmatizer
 import pprint
 import pandas as pd
+from nltk.stem.wordnet import WordNetLemmatizer
 
 S = requests.Session()
 
@@ -39,8 +39,7 @@ def get_wikidata_id_for_title(title: str):
 
     R = S.get(url=URL, params=PARAMS)
 
-
-SEARCHPAGE = "Nelson Mandela"
+    return R.text.split('wikibase_item":"')[1].split('"')[0]
 
 
 def get_wikidata_properties_for_id(id: str):
@@ -53,8 +52,6 @@ def get_wikidata_properties_for_id(id: str):
     R = S.get(url=WIKIDATA, params=PARAMS)
 
     d = R.json()["claims"]
-
-    pp.pprint(d["P570"])
 
     ps = list(d.keys())
 
@@ -91,13 +88,12 @@ wikidata_conversions = {
 
 }
 
-R = S.get(url=URL, params=PARAMS)
-DATA = R.json()
 
-
-def SearchPhrase(phrase):
-
+def SearchPhrase(phrase, words):
+    print(f"starting {phrase}")
     # SEARCHPAGE = phrase
+
+    words = [wikidata_conversions.get(w, w) for w in words]
 
     results = wikipedia.search(phrase, results=1)
 
@@ -114,30 +110,29 @@ def SearchPhrase(phrase):
 
     id = get_wikidata_id_for_title(r)
 
-    print(get_wikidata_properties_for_id(id))
+    properties = get_wikidata_properties_for_id(id)
 
-    data = client.get(id, load=True)
+    related = {}
 
+    for i in properties.index:
+        label = properties["label"][i]
+        value = properties["value"][i]
+
+        ls = label.split(" ")
+        for w in words:
+            if w in ls:
+                related[label] = value
+
+    return phrase, summary, related
+
+
+def get_words(phrase):
     words = phrase.split(" ")
 
-    # words = [WordNetLemmatizer().lemmatize(word, 'v') for word in words]
+    words = [WordNetLemmatizer().lemmatize(word, 'v') for word in words]
 
-    # words = [wikidata_conversions.get(w, w) for w in words]
+    return words
 
-    print(words)
-
-    for prop in data:
-
-        label = '{!r}'.format(prop.label)[2:-1].split(" ")
-
-        for word in words:
-            if word in label:
-                print(f"Relevant?: {prop.label}, {data.getlist(prop)}")
-
-    return summary
-
-
-print(results)
 
 if __name__ == "__main__":
-    SearchPhrase("nelson mandella death")
+    print(SearchPhrase("nelson mandella death"))
