@@ -1,7 +1,7 @@
 import pafy
 import os
 
-url = "https://www.youtube.com/watch?v=rqWClsdVFOU"
+url = "https://www.youtube.com/watch?v=PbBzhqJK3bg&t=1582s"
 
 video = pafy.new(url)
 
@@ -10,7 +10,6 @@ choice = audio[0]
 for a in audio:
     if(a.get_filesize() < choice.get_filesize()):
         choice = a
-print(choice.filename)
 choice.download()
-#os.remove("AudioFile")
+os.remove(choice.filename)
 
