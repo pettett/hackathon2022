@@ -2,7 +2,7 @@ import pafy
 import os
 from deepgram_test import *
 
-url = "https://www.youtube.com/watch?v=r5OPTj7fKVw"
+url = "https://www.youtube.com/watch?v=xuCn8ux2gbs"
 
 video = pafy.new(url)
 
@@ -12,6 +12,7 @@ for a in audio:
     if(a.get_filesize() < choice.get_filesize()):
         choice = a
 choice.download()
-test = process(choice.filename)
+transcript = process(choice.filename)
 os.remove(choice.filename)
+
 
