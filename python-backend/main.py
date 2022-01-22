@@ -3,21 +3,19 @@ from copyreg import constructor
 from email import message
 import websockets
 import json
-
+import navHandler
 
 async def consumer(message):
     #Message format is 
     # { "type": message_type
     #   "data": 
     # }
-    print(message)
     message_parsed = json.loads(message)
-    print(message_parsed)
-    print(message)
     message_type = message_parsed['type']
     message_data = message_parsed['data']
+    print(message)
     if message_type == "navChange":
-        print(message_data['url'])
+        await navHandler.navHandler(message_data['url'])
     elif message_type == "echo":
         print(message_data)
     

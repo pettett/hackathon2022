@@ -11,7 +11,7 @@ const socket = new WebSocket('ws://localhost:8765');
 console.log("Here");
 // Connection opened
 socket.addEventListener('open', function (event) {
-    SendWebSocketMessage('echo','Hello Server!');
+    SendWebSocketMessage('echo', 'Hello Server!');
 });
 
 // Listen for messages
@@ -26,19 +26,34 @@ socket.addEventListener('message', async function (event) {
     });
 });
 
-function SendWebSocketMessage(type, data){
+function SendWebSocketMessage(type, data) {
     socket.send(JSON.stringify({
         "type": type,
-        "data":data
+        "data": data
     }));
 }
 
-function SendNavChange(url){
+function SendNavChange(url) {
     SendWebSocketMessage("navChange", {
-        url
+        "url": url
     });
 }
 
-chrome.webNavigation.onCommitted.addListener(callback = (details) => {
-    SendNavChange(details.url)
+chrome.tabs.onUpdated.addListener(function
+    (tabId, changeInfo, tab) {
+    console.log("magic");
+    // read changeInfo data and do something with it (like read the url)
+    if (changeInfo.url) {
+        SendNavChange(changeInfo.url)
+    }
+
+}
+);
+
+chrome.tabs.onActivated.addListener(function (activeInfo) {
+    chrome.tabs.get(tabId = activeInfo.tabId,
+        callback = (tab) => {
+            console.log(tab)
+            SendNavChange(tab.url)
+        });
 });
