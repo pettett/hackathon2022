@@ -8,7 +8,8 @@
     "scripting",
     "background",
     "tabs",
-    "activeTab"
+    "activeTab",
+    "webNavigation"
   ],
   "host_permissions":["https://*/*","http://*/*"],
   "content_scripts": [
