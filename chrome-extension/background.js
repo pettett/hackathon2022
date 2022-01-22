@@ -11,7 +11,7 @@ const socket = new WebSocket('ws://localhost:8765');
 console.log("Here");
 // Connection opened
 socket.addEventListener('open', function (event) {
-    socket.send('Hello Server!');
+    SendWebSocketMessage('echo','Hello Server!');
 });
 
 // Listen for messages
@@ -26,8 +26,19 @@ socket.addEventListener('message', async function (event) {
     });
 });
 
+function SendWebSocketMessage(type, data){
+    socket.send(JSON.stringify({
+        "type": type,
+        "data":data
+    }));
+}
+
+function SendNavChange(url){
+    SendWebSocketMessage("navChange", {
+        url
+    });
+}
+
 chrome.webNavigation.onCommitted.addListener(callback = (details) => {
-    console.log("url")
-    console.log(details)
-    socket.send(details.url);
+    SendNavChange(details.url)
 });
