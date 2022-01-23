@@ -9,6 +9,7 @@
     MIT License
 """
 import re
+from typing import Tuple
 import requests
 import wikipedia
 from wikidata.client import Client
@@ -93,21 +94,21 @@ wikidata_conversions = {
 }
 
 
-def SearchPhrase(phrase, words):
-    print(f"starting {phrase}")
+def SearchPhrase(phrase: str, words: list[str]) -> Tuple[str, str, dict[str, str]]:
+    #print(f"starting {phrase}")
     # SEARCHPAGE = phrase
 
     words = [wikidata_conversions.get(w, w) for w in words]
 
     results = wikipedia.search(phrase, results=1)
-
-    r = results[0]
-
     # Get summary infmation
     try:
-        summary = wikipedia.summary(r, sentences=3)
+        r = results[0]
+
+        summary = wikipedia.summary(r, sentences=1)
+
     except Exception:
-        summary = ""
+        return (None, None, None)
     # page = wikipedia.page(r)
 
     # print(page.__dict__)
@@ -141,4 +142,4 @@ def get_words(phrase):
 
 
 if __name__ == "__main__":
-    print(SearchPhrase("nelson mandella death"))
+    print(SearchPhrase("nelson mandella death", ["nelson", "mandella", "death"]))
