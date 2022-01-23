@@ -5,3 +5,5 @@
 *.webm
 **/__pycache__
 python-backend/config.py
+python-backend/data/*
+*.pyc
