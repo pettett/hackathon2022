@@ -19,7 +19,7 @@ def url_to_identifier(url):
 async def nav_handler(url):
     try:
         filename = url_to_identifier(url)
-    except Exception as e:
+    except ValueError as e:
         print(e)
         print("idiot")
         return
@@ -27,10 +27,10 @@ async def nav_handler(url):
     print("bob ross")
     dirpath = os.path.join(utils.file.get_data_dir(), filename)
 
-    # if os.path.isdir(dirpath):
-    #print("Already found")
-    # return
-    # TODO: ADD LOGIC
-    # else:
-    # os.mkdir(dirpath)
+    if os.path.isdir(dirpath):
+        print("Already found")
+        return
+        # TODO: ADD LOGIC
+    else:
+         os.mkdir(dirpath)
     await videodownload.parse_video(url, filename)

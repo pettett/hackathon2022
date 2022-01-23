@@ -3,7 +3,6 @@ import pafy
 from deepgram_test import *
 from text_parser import *
 import os
-import utils.file
 
 
 async def parse_video(url, videoname):
