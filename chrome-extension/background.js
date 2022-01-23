@@ -19,7 +19,7 @@ socket.addEventListener('message', async function (event) {
 	console.log('Message from server ', event.data);
 	const tabId = await getTabId();
 	chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-		chrome.tabs.sendMessage(tabs[0].id, { text: event.data }, function (response) {
+		chrome.tabs.sendMessage(tabs[0].id, JSON.parse(event.data), function (response) {
 			console.log(response.text);
 		});
 	});

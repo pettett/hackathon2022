@@ -18,31 +18,35 @@ desc.id = "desc";
 
 para.appendChild(desc);
 
+/*
 const facts = document.createElement("p");
 facts.innerText = "Fact 1: Died";
 facts.id = "Facts";
 facts.style = "font-size: medium";
+*/
 
-para.appendChild(facts);
+//para.appendChild(facts);
 
 const element = document.getElementsByTagName("body")[0];
 element.appendChild(para);
 
 function changeKeyword(textvar) {
+    console.log("hewwo")
 	document.getElementById("Header").textContent = textvar;
 }
 
 function changeDesc(descrip) {
+    console.log("uwu")
 	document.getElementById("desc").textContent = descrip;
 }
 
-function changeFacts(facts) {
+/*function changeFacts(facts) {
 	text = getElementById("Facts").textContent;
 	text = "";
 	for (let fact = 0; fact < facts.length; fact++) {
 		text += facts[fact] + "<br>";
 	}
-}
+}*/
 
 function off() {
 	document.getElementById("InfoOverlay").style.display = "none";
@@ -68,9 +72,12 @@ chrome.runtime.onMessage.addListener(
 		console.log(request);
 		switch (request.type) {
 			case "facts":
-				changeKeyword(request.data.keyword)
-				changeDesc(request.data.desc)
-				changeText(request.data.facts)
+                if(request.data != null){
+                    request.data = JSON.parse(request.data)
+                    changeKeyword(request.data.keyword)
+				    changeDesc(request.data.desc)
+				    //changeFacts(request.data.facts)
+                }
 				break;
 		}
 	}

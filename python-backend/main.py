@@ -24,12 +24,14 @@ async def consumer(message):
 
 async def consumer_handler(websocket, path):
     async for message in websocket:
-        await consumer(message)
+        response = await consumer(message)
+        if response is not None:
+            await websocket.send(response)
 
 async def handler(websocket, path):
     await asyncio.gather(
         consumer_handler(websocket, path),
-        producer_handler(websocket, path),
+        #producer_handler(websocket, path),
     )
 
 async def producer():
@@ -39,13 +41,13 @@ async def producer():
         await asyncio.sleep(1)
         yield str(counter)
 
-async def producer_handler(websocket, path):
-    while True:
+#async def producer_handler(websocket, path):
+ #   while True:
         #ADD AWAIT
         #message = await producer()
-        message="magic"
-        await asyncio.sleep(1)
-        await websocket.send(message)
+  #      message="magic"
+   #     await asyncio.sleep(1)
+    #    await websocket.send(message)
 
 
 if __name__ == "__main__":

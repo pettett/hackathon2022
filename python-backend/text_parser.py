@@ -1,4 +1,5 @@
 
+from email.errors import MisplacedEnvelopeHeaderDefect
 from typing import Tuple
 from pandas import cut
 from rake_nltk import Rake
@@ -23,11 +24,15 @@ def poll_facts(videoname: str, timestamp: float):
     if v == None:
         return None
 
-    for ((t_s, t_e), fact) in v:
-        if t_s < timestamp and timestamp < t_e:
-            return fact
+    minFact = None
+    minTime = 99999999999999
 
-    return None
+    for ((t_s, t_e), fact) in v:
+        if t_s < timestamp:
+            if(timestamp - t_s < minTime):
+                minFact = fact
+                minTime = timestamp - t_s
+    return minFact
 
 
 def process_sentence_block(videoname: str,  transcript: str, timestamps: list[Tuple[str, float, float]]):
