@@ -14,7 +14,7 @@ para.appendChild(heading);
 
 const desc = document.createElement("p");
 desc.innerText = "";
-desc.id = "desc";
+desc.id = "myDesc";
 
 para.appendChild(desc);
 
@@ -31,13 +31,16 @@ const element = document.getElementsByTagName("body")[0];
 element.appendChild(para);
 
 function changeKeyword(textvar) {
-    console.log("hewwo")
+	console.log("hewwo")
 	document.getElementById("Header").textContent = textvar;
 }
 
 function changeDesc(descrip) {
-    console.log(descrip)
-	document.getElementById("desc").textContent = descrip;
+	console.log(descrip)
+	if (descrip == null) {
+		return
+	}
+	document.getElementById("myDesc").textContent = descrip;
 }
 
 /*function changeFacts(facts) {
@@ -69,15 +72,21 @@ const interval = setInterval(function () {
 
 chrome.runtime.onMessage.addListener(
 	function (request, sender, sendResponse) {
-		console.log(request);
 		switch (request.type) {
 			case "facts":
-                if(request.data != null){
-                    request.data = JSON.parse(request.data)
-                    changeKeyword(request.data.keyword)
-				    changeDesc(request.data.description)
-				    //changeFacts(request.data.facts)
-                }
+				if (request.data != null) {
+					console.log(request);
+					request.data = JSON.parse(request.data);
+					try {
+						changeDesc(request.data.description);
+					} catch (error) {
+					}
+					try {
+						changeKeyword(request.data.keyword);
+					} catch (error) {
+					}	
+					//changeFacts(request.data.facts)
+				}
 				break;
 		}
 	}
