@@ -11,6 +11,23 @@ import utils.file
 
 from utils.json import EnhancedJSONEncoder
 
+from nltk import ConcordanceIndex
+
+from nltk.tokenize import wordpunct_tokenize
+
+
+class ConcordanceIndex2(ConcordanceIndex):
+    def create_concordance(self, word, token_width=13):
+        "Returns a list of contexts for @word with a context <= @token_width"
+        half_width = token_width // 2
+        contexts = []
+        for i, token in enumerate(self._tokens):
+            if token == word:
+                start = i - half_width if i >= half_width else 0
+                context = self._tokens[start:i + half_width + 1]
+                contexts.append(context)
+        return contexts
+
 
 pp = pprint.PrettyPrinter(indent=1)
 videos = {}
@@ -65,6 +82,10 @@ def process_sentence_block(videoname: str,  transcript: str, timestamps: list[Tu
     args1 = []
     args2 = []
 
+    tokens = wordpunct_tokenize(transcript)
+
+    c = ConcordanceIndex2(tokens)
+
     phrase_to_timestamp = {}
 
     for (score, phrase) in r.get_ranked_phrases_with_scores():
@@ -79,6 +100,8 @@ def process_sentence_block(videoname: str,  transcript: str, timestamps: list[Tu
         p = 0
 
         cs = 0
+
+        related = []
 
         for word, start, end in timestamps:
             if word == split[p]:
@@ -98,7 +121,15 @@ def process_sentence_block(videoname: str,  transcript: str, timestamps: list[Tu
         if valid:
             args1.append(phrase)
 
-            args2.append(wikipedia_search.get_words(phrase))
+            words = phrase.split(" ")
+            allWords = set(words)
+
+            for word in words:
+                allWords.update(*c.create_concordance(word))
+
+            words = wikipedia_search.get_words(allWords)
+
+            args2.append(words)
 
     print(phrase_to_timestamp)
 

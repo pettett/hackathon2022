@@ -37,15 +37,12 @@ const element = document.getElementsByTagName("body")[0];
 element.appendChild(para);
 
 function changeKeyword(textvar, link) {
-	console.log("hewwo")
 	const HeadingLinkEl = document.getElementById("HeadingLink");
 	HeadingLinkEl.textContent = textvar;
-	console.log(link)
-	HeadingLinkEl.href = link
+	HeadingLinkEl.href = link;
 }
 
 function changeDesc(descrip) {
-	console.log(descrip)
 	if (descrip == null) {
 		return
 	}

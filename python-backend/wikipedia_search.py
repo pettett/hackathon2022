@@ -151,8 +151,7 @@ def SearchPhrase(phrase: str, words: list[str]) -> Tuple[str, str, dict[str, str
     return phrase, Fact(r, summary, link, related)
 
 
-def get_words(phrase):
-    words = phrase.split(" ")
+def get_words(words):
 
     words = [WordNetLemmatizer().lemmatize(word, 'v') for word in words]
 
