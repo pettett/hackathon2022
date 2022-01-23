@@ -1,11 +1,7 @@
 
-import threading
-from time import time
-from turtle import Turtle
 from typing import Tuple
 from pandas import cut
 from rake_nltk import Rake
-import nltk
 import wikipedia_search
 import concurrent.futures
 
