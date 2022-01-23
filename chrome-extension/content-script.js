@@ -7,13 +7,13 @@ playerCont = document.getElementById("player-container")
 playerCont.appendChild(para);
 
 const heading = document.createElement("h1");
-heading.innerText = "Nelson Mandela";
+heading.innerText = "Keyword";
 heading.id = "Header";
 
 para.appendChild(heading);
 
 const desc = document.createElement("p");
-desc.innerText = "What a dude, a swaggy cool dude";
+desc.innerText = "";
 desc.id = "desc";
 
 para.appendChild(desc);
@@ -36,7 +36,7 @@ function changeKeyword(textvar) {
 }
 
 function changeDesc(descrip) {
-    console.log("uwu")
+    console.log(descrip)
 	document.getElementById("desc").textContent = descrip;
 }
 
@@ -75,7 +75,7 @@ chrome.runtime.onMessage.addListener(
                 if(request.data != null){
                     request.data = JSON.parse(request.data)
                     changeKeyword(request.data.keyword)
-				    changeDesc(request.data.desc)
+				    changeDesc(request.data.description)
 				    //changeFacts(request.data.facts)
                 }
 				break;
