@@ -7,14 +7,20 @@ para.onclick = "off()";
 //playerCont.appendChild(para);
 
 const heading = document.createElement("h1");
-heading.innerText = "Keyword";
 heading.id = "Header";
+
+const headinglink = document.createElement("a");
+headinglink.id = "HeadingLink"
+headinglink.innerText = "Keyword";
+heading.appendChild(headinglink)
 
 para.appendChild(heading);
 
 const desc = document.createElement("p");
 desc.innerText = "";
 desc.id = "myDesc";
+
+
 
 para.appendChild(desc);
 
@@ -30,9 +36,12 @@ facts.style = "font-size: medium";
 const element = document.getElementsByTagName("body")[0];
 element.appendChild(para);
 
-function changeKeyword(textvar) {
+function changeKeyword(textvar, link) {
 	console.log("hewwo")
-	document.getElementById("Header").textContent = textvar;
+	const HeadingLinkEl = document.getElementById("HeadingLink");
+	HeadingLinkEl.textContent = textvar;
+	console.log(link)
+	HeadingLinkEl.href = link
 }
 
 function changeDesc(descrip) {
@@ -42,6 +51,7 @@ function changeDesc(descrip) {
 	}
 	document.getElementById("myDesc").textContent = descrip;
 }
+
 
 /*function changeFacts(facts) {
 	text = getElementById("Facts").textContent;
@@ -73,18 +83,13 @@ const interval = setInterval(function () {
 chrome.runtime.onMessage.addListener(
 	function (request, sender, sendResponse) {
 		switch (request.type) {
-			case "facts":
+			case "facts": 
 				if (request.data != null) {
 					console.log(request);
 					request.data = JSON.parse(request.data);
-					try {
-						changeDesc(request.data.description);
-					} catch (error) {
-					}
-					try {
-						changeKeyword(request.data.keyword);
-					} catch (error) {
-					}	
+					changeKeyword(request.data.keyword, request.data.link);
+					changeDesc(request.data.description);
+					
 					//changeFacts(request.data.facts)
 				}
 				break;
