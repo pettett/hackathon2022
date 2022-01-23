@@ -13,7 +13,7 @@ heading.id = "Header";
 para.appendChild(heading);
 
 const desc = document.createElement("p");
-desc.innerText = "What a dude, so swaggy cool dude";
+desc.innerText = "What a dude, a swaggy cool dude";
 desc.id = "desc";
 
 para.appendChild(desc);
@@ -27,9 +27,6 @@ para.appendChild(facts);
 
 const element = document.getElementsByTagName("body")[0];
 element.appendChild(para);
-
-player = document.getElementById("movie_player");
-time = player.getCurrentTime();
 
 function changeKeyword(textvar){
     document.getElementById("Header").textContent = textvar;
@@ -51,6 +48,21 @@ function off() {
     document.getElementById("InfoOverlay").style.display = "none";
 }
 
+const interval = setInterval(function() {
+    let player =document.getElementsByClassName('video-stream')[0];
+    let time = player.currentTime; 
+    chrome.runtime.sendMessage({
+        "timestamp": time
+        }, function(response){});
+  }, 5000);
+
+  /*
+        "type": "pollFact",
+        "data": {
+        "url": window.location.href,
+        "timestamp": time
+  */
+
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         console.log(sender.tab ?
@@ -58,6 +70,6 @@ chrome.runtime.onMessage.addListener(
             "from the extension");
         //changeText(request.text)
         
-        time = player.getCurrentTime();
+        //time = player.getCurrentTime();
     }
 );
