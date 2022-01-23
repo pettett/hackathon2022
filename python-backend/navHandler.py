@@ -7,13 +7,9 @@ import videodownload
 
 def url_to_identifier(url):
     # check if is valid YouTube url
-    valid = re.search("http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?", url)
-    print(valid)
-    print(url)
-    if valid == None:
-        raise ValueError("Invalid url")
-
-    return utils.file.sanatise_file_name(url)
+    if (url[:32] == "https://www.youtube.com/watch?v=") and (len(url) == 43):
+        return utils.file.sanatise_file_name(url)
+    raise ValueError("Invalid url")
 
 
 async def nav_handler(url):
