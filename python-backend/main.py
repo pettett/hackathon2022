@@ -3,8 +3,8 @@ from copyreg import constructor
 from email import message
 import websockets
 import json
-import handlers.navHandler as navHandler
-import handlers.pollFacthandler as pollFacthandler
+import navHandler as navHandler
+import pollFacthandler as pollFacthandler
 async def consumer(message):
     #Message format is 
     # { "type": message_type
@@ -19,7 +19,7 @@ async def consumer(message):
     elif message_type == "echo":
         print(message_data)
     elif message_type == "pollFact":
-        return await pollFacthandler(message_data['url'], message_data['timestamp'])
+        return await pollFacthandler.poll_fact_handler(message_data['url'], message_data['timestamp'])
     
 
 async def consumer_handler(websocket, path):

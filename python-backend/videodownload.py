@@ -11,13 +11,13 @@ def parse_video(url, videoname):
     audio = video.audiostreams
     choice = audio[0]
 
-    filepath = os.path.join(utils.file.get_data_dir, videoname)
+    #filepath = os.path.join(utils.file.get_data_dir(), videoname)
     for a in audio:
         if(a.extension == "webm"):
             choice = a
-    choice.download(file=filepath)
+    choice.download()
     transcript = process(choice.filename)
-    os.remove(filepath)
+    os.remove(choice.filename)
     process_sentence_block(videoname, *transcript)
 
 

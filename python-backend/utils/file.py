@@ -21,7 +21,7 @@ def sanatise_file_name(value, allow_unicode=False):
 
 
 def get_project_root() -> Path:
-    return Path(__file__).parent
+    return str(Path(__file__).parent.parent)
 
 def get_data_dir():
-    os.path.join(get_project_root(),"data")
+    return os.path.join(get_project_root(),"data")
