@@ -5,7 +5,8 @@ from text_parser import *
 import os
 import utils.file
 
-def parse_video(url, videoname):
+
+async def parse_video(url, videoname):
     video = pafy.new(url)
 
     audio = video.audiostreams
@@ -16,8 +17,6 @@ def parse_video(url, videoname):
         if(a.extension == "webm"):
             choice = a
     choice.download()
-    transcript = process(choice.filename)
-    os.remove(choice.filename)
+    transcript = await process(choice.filename)
+    # os.remove(choice.filename)
     process_sentence_block(videoname, *transcript)
-
-

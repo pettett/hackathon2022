@@ -4,6 +4,7 @@ import os
 import utils.file
 import videodownload
 
+
 def url_to_identifier(url):
     # check if is valid YouTube url
     valid = re.search("http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?", url)
@@ -24,16 +25,12 @@ async def nav_handler(url):
         return
     print(filename)
     print("bob ross")
-    dirpath = os.path.join(utils.file.get_data_dir(),filename)
+    dirpath = os.path.join(utils.file.get_data_dir(), filename)
 
-    #if os.path.isdir(dirpath):
-        #print("Already found")
-        #return
-        #TODO: ADD LOGIC
-    #else:
-        #os.mkdir(dirpath)
-    videodownload.parse_video(url, filename)
-
-
-
-
+    # if os.path.isdir(dirpath):
+    #print("Already found")
+    # return
+    # TODO: ADD LOGIC
+    # else:
+    # os.mkdir(dirpath)
+    await videodownload.parse_video(url, filename)

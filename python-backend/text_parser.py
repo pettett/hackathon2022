@@ -120,6 +120,7 @@ def process_sentence_block(videoname: str,  transcript: str, timestamps: list[Tu
 
             print(" ")
 
+    print(f"Finished getting wikipedia data for {videoname}")
     videos[videoname] = timestampedData
 
 
