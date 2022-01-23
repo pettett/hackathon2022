@@ -17,6 +17,18 @@ import pprint
 import pandas as pd
 from nltk.stem.wordnet import WordNetLemmatizer
 
+
+from dataclasses import dataclass
+
+
+@dataclass
+class Fact:
+    keyword: str
+    description: str
+    link: str
+    facts: list[Tuple[str, str]]
+
+
 S = requests.Session()
 
 URL = "https://en.wikipedia.org/w/api.php"
@@ -40,7 +52,11 @@ def get_wikidata_id_for_title(title: str):
 
     R = S.get(url=URL, params=PARAMS)
 
-    return R.text.split('wikibase_item":"')[1].split('"')[0]
+    # get pageid for link
+    id = R.text.split('pageid":')[1].split(",")[0]
+
+    wikidata = R.text.split('wikibase_item":"')[1].split('"')[0]
+    return id, wikidata
 
 
 def get_wikidata_properties_for_id(id: str):
@@ -115,7 +131,9 @@ def SearchPhrase(phrase: str, words: list[str]) -> Tuple[str, str, dict[str, str
 
     # Get isolated facts about the topic
 
-    id = get_wikidata_id_for_title(r)
+    wid, id = get_wikidata_id_for_title(r)
+
+    link = f"http://en.wikipedia.org/wiki?curid={wid}"
 
     properties = get_wikidata_properties_for_id(id)
 
@@ -130,7 +148,7 @@ def SearchPhrase(phrase: str, words: list[str]) -> Tuple[str, str, dict[str, str
             if w in ls:
                 related[label] = value
 
-    return phrase, r, summary, related
+    return phrase, Fact(r, summary, link, related)
 
 
 def get_words(phrase):

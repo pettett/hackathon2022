@@ -6,20 +6,13 @@ from pandas import cut
 from rake_nltk import Rake
 import wikipedia_search
 import concurrent.futures
-
-from dataclasses import dataclass
+import pprint
 import utils.file
 
 from utils.json import EnhancedJSONEncoder
 
 
-@dataclass
-class Fact:
-    keyword: str
-    description: str
-    facts: list[Tuple[str, str]]
-
-
+pp = pprint.PrettyPrinter(indent=1)
 videos = {}
 
 
@@ -112,35 +105,21 @@ def process_sentence_block(videoname: str,  transcript: str, timestamps: list[Tu
     timestampedData = []
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        for (phrase, title, s, r) in executor.map(wikipedia_search.SearchPhrase, args1, args2):
+        for (phrase, fact) in executor.map(wikipedia_search.SearchPhrase, args1, args2):
             if phrase == None:
                 continue
 
             #title = wikipedia_search.SearchForTitle(phrase,wikipedia_search.get_words(phrase))
 
-            timestampedData.append((phrase_to_timestamp[phrase], Fact(title, s, r)))
+            timestampedData.append((phrase_to_timestamp[phrase], fact))
             # timestampedData.append((phrase_to_timestamp[phrase],Fact(title,s,r)))
 
-            print("")
-
-            print(phrase)
-
-            print("-------")
-
-            print(s)
-
-            print("---------")
-
-            for k, v in r.items():
-                print(f"{k} |  {v}")
-
-            print("-------")
-
-            print(" ")
+            pp.pprint(fact)
 
     print(f"Finished getting wikipedia data for {videoname}")
     videos[videoname] = timestampedData
-    with open(os.path.join(utils.file.get_data_dir(), videoname, "facts.json"), "w") as f:
+    path = os.path.join(utils.file.get_data_dir(), videoname, "facts.json")
+    with open(path, "w") as f:
         f.write(json.dumps(timestampedData, cls=EnhancedJSONEncoder))
 
 
