@@ -124,7 +124,7 @@ def SearchPhrase(phrase: str, words: list[str]) -> Tuple[str, str, dict[str, str
         summary = wikipedia.summary(r, sentences=1)
 
     except Exception:
-        return (None, None, None, None)
+        return (None, None)
     # page = wikipedia.page(r)
 
     # print(page.__dict__)
