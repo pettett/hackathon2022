@@ -12,6 +12,7 @@ import utils.file
 
 from utils.json import EnhancedJSONEncoder
 
+
 @dataclass
 class Fact:
     keyword: str
@@ -26,8 +27,8 @@ def poll_facts(videoname: str, timestamp: float):
     v = videos.get(videoname, None)
     if v == None:
         try:
-            with open(os.path.join(utils.file.get_data_dir(), videoname,"facts.json"),"r") as f:
-                v=json.loads(f.read())
+            with open(os.path.join(utils.file.get_data_dir(), videoname, "facts.json"), "r") as f:
+                v = json.loads(f.read())
                 if v == None:
                     return None
         except FileNotFoundError:
@@ -110,15 +111,15 @@ def process_sentence_block(videoname: str,  transcript: str, timestamps: list[Tu
 
     timestampedData = []
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
-        for (phrase, s, r) in executor.map(wikipedia_search.SearchPhrase, args1, args2):
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        for (phrase, title, s, r) in executor.map(wikipedia_search.SearchPhrase, args1, args2):
             if phrase == None:
                 continue
 
             #title = wikipedia_search.SearchForTitle(phrase,wikipedia_search.get_words(phrase))
 
-            timestampedData.append((phrase_to_timestamp[phrase], Fact(phrase, s, r)))
-            #timestampedData.append((phrase_to_timestamp[phrase],Fact(title,s,r)))
+            timestampedData.append((phrase_to_timestamp[phrase], Fact(title, s, r)))
+            # timestampedData.append((phrase_to_timestamp[phrase],Fact(title,s,r)))
 
             print("")
 
@@ -139,7 +140,7 @@ def process_sentence_block(videoname: str,  transcript: str, timestamps: list[Tu
 
     print(f"Finished getting wikipedia data for {videoname}")
     videos[videoname] = timestampedData
-    with open(os.path.join(utils.file.get_data_dir(), videoname,"facts.json"),"w") as f:
+    with open(os.path.join(utils.file.get_data_dir(), videoname, "facts.json"), "w") as f:
         f.write(json.dumps(timestampedData, cls=EnhancedJSONEncoder))
 
 
