@@ -19,7 +19,7 @@ async def consumer(message):
     elif message_type == "echo":
         print(message_data)
     elif message_type == "pollFact":
-        return await pollFacthandler.poll_fact_handler(message_data['url'], message_data['timestamp'])
+        return await pollFacthandler.poll_fact_handler(message_data['url'], message_data['timestamp'], message_data['tabId'])
     
 
 async def consumer_handler(websocket, path):
@@ -51,6 +51,7 @@ async def producer():
 
 
 if __name__ == "__main__":
+    print("Initializing")
     start_server = websockets.serve(handler, "localhost", 8765)
     asyncio.get_event_loop().run_until_complete(start_server)
     asyncio.get_event_loop().run_forever()

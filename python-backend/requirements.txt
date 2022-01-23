@@ -1,2 +1,8 @@
 pafy
 rake-nltk
+deepgram-sdk
+youtube_dl
+wikipedia
+Wikidata
+pandas
+numpy

@@ -19,9 +19,16 @@ socket.addEventListener('message', async function (event) {
 	console.log('Message from server ', event.data);
 	const tabId = await getTabId();
 	chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-		chrome.tabs.sendMessage(tabs[0].id, JSON.parse(event.data), function (response) {
-			console.log(response.text);
-		});
+		response = JSON.parse(event.data)
+		console.log(response)
+		console.log(tabs[0].id)
+		console.log(response.tabId)
+		console.log(parseInt(response.tabId) == tabs[0].id)
+		if (parseInt(response.tabId) == tabs[0].id) {
+			chrome.tabs.sendMessage(tabs[0].id, JSON.parse(event.data), function (response) {
+				console.log(response.text);
+			});
+		}
 	});
 });
 
@@ -40,9 +47,12 @@ function SendNavChange(url) {
 
 chrome.runtime.onMessage.addListener(
 	function (request, sender, sendResponse) {
+		console.log(sender.tab.url)
+		console.log("Here")
 		SendWebSocketMessage("pollFact", {
 			"url": sender.tab.url,
-			"timestamp": request.timestamp
+			"timestamp": request.timestamp,
+			"tabId": sender.tab.id
 		});
 	}
 );

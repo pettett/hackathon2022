@@ -1,5 +1,6 @@
 
-from email.errors import MisplacedEnvelopeHeaderDefect
+import json
+import os
 from typing import Tuple
 from pandas import cut
 from rake_nltk import Rake
@@ -7,7 +8,9 @@ import wikipedia_search
 import concurrent.futures
 
 from dataclasses import dataclass
+import utils.file
 
+from utils.json import EnhancedJSONEncoder
 
 @dataclass
 class Fact:
@@ -22,7 +25,13 @@ videos = {}
 def poll_facts(videoname: str, timestamp: float):
     v = videos.get(videoname, None)
     if v == None:
-        return None
+        try:
+            with open(os.path.join(utils.file.get_data_dir(), videoname,"facts.json"),"r") as f:
+                v=json.loads(f.read())
+                if v == None:
+                    return None
+        except FileNotFoundError:
+            return None
 
     minFact = None
     minTime = 99999999999999
@@ -130,6 +139,8 @@ def process_sentence_block(videoname: str,  transcript: str, timestamps: list[Tu
 
     print(f"Finished getting wikipedia data for {videoname}")
     videos[videoname] = timestampedData
+    with open(os.path.join(utils.file.get_data_dir(), videoname,"facts.json"),"w") as f:
+        f.write(json.dumps(timestampedData, cls=EnhancedJSONEncoder))
 
 
 if __name__ == "__main__":

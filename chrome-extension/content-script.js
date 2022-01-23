@@ -3,8 +3,8 @@ para.className = "overlay";
 para.id = "InfoOverlay";
 para.onclick = "off()";
 
-playerCont = document.getElementById("player-container")
-playerCont.appendChild(para);
+//playerCont = document.getElementById("player-container")
+//playerCont.appendChild(para);
 
 const heading = document.createElement("h1");
 heading.innerText = "Keyword";
