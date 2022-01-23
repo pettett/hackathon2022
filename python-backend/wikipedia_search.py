@@ -130,7 +130,7 @@ def SearchPhrase(phrase: str, words: list[str]) -> Tuple[str, str, dict[str, str
             if w in ls:
                 related[label] = value
 
-    return phrase, summary, related
+    return r, summary, related
 
 
 def get_words(phrase):
