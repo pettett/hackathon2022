@@ -10,11 +10,11 @@ video = pafy.new(url)
 audio = video.audiostreams
 choice = audio[0]
 for a in audio:
-    if(a.get_filesize() < choice.get_filesize()):
+    if(a.extension == "webm"):
         choice = a
 choice.download()
 transcript = process(choice.filename)
-#os.remove(choice.filename)
+os.remove(choice.filename)
 process_sentence_block(choice.filename, *transcript)
 
 
