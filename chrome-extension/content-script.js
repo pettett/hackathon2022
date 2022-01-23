@@ -53,11 +53,12 @@ function off() {
 
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
-        console.log(sender.tab ?
-            "from a content script:" + sender.tab.url :
-            "from the extension");
-        //changeText(request.text)
-        
-        time = player.getCurrentTime();
+        switch(request.type) {
+            case "facts":
+                changeKeyword(request.data.keyword)
+                changeDesc(request.data.desc)
+                changeText(request.data.facts)
+              break;
+          } 
     }
 );

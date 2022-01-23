@@ -18,7 +18,6 @@ socket.addEventListener('open', function (event) {
 socket.addEventListener('message', async function (event) {
     console.log('Message from server ', event.data);
     const tabId = await getTabId();
-    console.log(tabId)
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, { text: event.data }, function (response) {
             console.log(response.text);
@@ -41,7 +40,6 @@ function SendNavChange(url) {
 
 chrome.tabs.onUpdated.addListener(function
     (tabId, changeInfo, tab) {
-    console.log("magic");
     // read changeInfo data and do something with it (like read the url)
     if (changeInfo.url) {
         SendNavChange(changeInfo.url)

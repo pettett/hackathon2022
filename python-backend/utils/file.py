@@ -1,8 +1,9 @@
 import re
 import unicodedata
+from pathlib import Path
 import os
 
-def SanatiseFileName(value, allow_unicode=False):
+def sanatise_file_name(value, allow_unicode=False):
     """
     Taken from https://github.com/django/django/blob/master/django/utils/text.py
     Convert to ASCII if 'allow_unicode' is False. Convert spaces or repeated
@@ -18,21 +19,9 @@ def SanatiseFileName(value, allow_unicode=False):
     value = re.sub(r'[^\w\s-]', '', value.lower())
     return re.sub(r'[-\s]+', '-', value).strip('-_')
 
-async def navHandler(url):
-    # check if is valid YouTube url
-    valid = re.search("http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?", url)
-    if not valid:
-        return
-    
-    currentdirname = os.path.dirname(__file__)
-    filename = SanatiseFileName(url)
-    print(currentdirname)
-    print(filename)
-    dirpath = os.path.join(currentdirname,'data',filename)
-    if os.path.isdir(dirpath):
-        print("Already found")
-        #TODO: ADD LOGIC
-    else:
-        os.mkdir(dirpath)
 
+def get_project_root() -> Path:
+    return Path(__file__).parent
 
+def get_data_dir():
+    os.path.join(get_project_root(),"data")
