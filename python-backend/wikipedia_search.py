@@ -59,8 +59,12 @@ def get_wikidata_properties_for_id(id: str):
 
     properties = pd.DataFrame(index=d.keys(), columns=["value", "type", "label"])
 
-    properties["type"] = properties.index.map(lambda x: d[x][0]["mainsnak"]["datatype"])
-    properties["value"] = properties.index.map(lambda x: d[x][0]["mainsnak"]["datavalue"]["value"])
+    properties["type"] = properties.index.map(
+        lambda x: d[x][0]["mainsnak"]["datatype"]
+    )
+    properties["value"] = properties.index.map(
+        lambda x: d[x][0]["mainsnak"].get("datavalue", {}).get("value", None)
+    )
 
     for i in range(0, len(ps), chunksize):
         # request properties in chunks of 30
@@ -100,8 +104,10 @@ def SearchPhrase(phrase, words):
     r = results[0]
 
     # Get summary infmation
-    summary = wikipedia.summary(r, sentences=3)
-
+    try:
+        summary = wikipedia.summary(r, sentences=3)
+    except Exception:
+        summary = ""
     # page = wikipedia.page(r)
 
     # print(page.__dict__)
