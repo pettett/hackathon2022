@@ -38,6 +38,14 @@ function SendNavChange(url) {
     });
 }
 
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        SendWebSocketMessage("pollFact",{
+            "url": sender.tab.url,
+            "timestamp": request.timestamp});
+    }
+  );
+
 chrome.tabs.onUpdated.addListener(function
     (tabId, changeInfo, tab) {
     // read changeInfo data and do something with it (like read the url)
