@@ -11,7 +11,7 @@ async def main(PATH_TO_FILE):
 
 
 def process(path):
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    # asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     response = asyncio.run(main(path))['results']['channels'][0]['alternatives']
     mle, ml = -1, None
     for alternative in response:

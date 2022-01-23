@@ -89,6 +89,7 @@ def process_sentence_block(videoname: str,  transcript: str, timestamps: list[Tu
 
         if valid:
             args1.append(phrase)
+
             args2.append(wikipedia_search.get_words(phrase))
 
     print(phrase_to_timestamp)
