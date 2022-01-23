@@ -64,3 +64,7 @@ chrome.tabs.onActivated.addListener(function (activeInfo) {
 			SendNavChange(tab.url)
 		});
 });
+
+$('#clickme').onclick(function() {
+    alert("clicked");
+});

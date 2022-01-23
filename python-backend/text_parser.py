@@ -106,7 +106,10 @@ def process_sentence_block(videoname: str,  transcript: str, timestamps: list[Tu
             if phrase == None:
                 continue
 
+            #title = wikipedia_search.SearchForTitle(phrase,wikipedia_search.get_words(phrase))
+
             timestampedData.append((phrase_to_timestamp[phrase], Fact(phrase, s, r)))
+            #timestampedData.append((phrase_to_timestamp[phrase],Fact(title,s,r)))
 
             print("")
 
