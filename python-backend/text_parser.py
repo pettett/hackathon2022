@@ -1,5 +1,6 @@
 
 from typing import Tuple
+from pandas import cut
 from rake_nltk import Rake
 import wikipedia_search
 import concurrent.futures
@@ -49,7 +50,9 @@ def process_sentence_block(videoname: str,  transcript: str, timestamps: list[Tu
     # Extraction given the list of strings where each string is a sentence.
     r.extract_keywords_from_text(transcript)
 
-    cutoff = 2
+    cutoff = len(timestamps) ** 0.3
+
+    print(cutoff)
 
     args1 = []
     args2 = []
@@ -59,6 +62,8 @@ def process_sentence_block(videoname: str,  transcript: str, timestamps: list[Tu
     for (score, phrase) in r.get_ranked_phrases_with_scores():
         if score < cutoff:
             continue
+
+        print(score, phrase)
 
         split = phrase.split(" ")
 
@@ -92,6 +97,8 @@ def process_sentence_block(videoname: str,  transcript: str, timestamps: list[Tu
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
         for (phrase, s, r) in executor.map(wikipedia_search.SearchPhrase, args1, args2):
+            if phrase == None:
+                continue
 
             timestampedData.append((phrase_to_timestamp[phrase], Fact(phrase, s, r)))
 
