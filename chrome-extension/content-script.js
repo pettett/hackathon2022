@@ -31,12 +31,10 @@ const element = document.getElementsByTagName("body")[0];
 element.appendChild(para);
 
 function changeKeyword(textvar) {
-	console.log("hewwo")
 	document.getElementById("Header").textContent = textvar;
 }
 
 function changeDesc(descrip) {
-	console.log(descrip)
 	if (descrip == null) {
 		return
 	}
