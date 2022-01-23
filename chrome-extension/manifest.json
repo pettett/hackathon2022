@@ -1,6 +1,8 @@
 {
   "name": "Hack Cambridge 2022",
-  "action": {},
+  "action": {
+    "default_popup": "popup.html"
+  },
   "manifest_version": 3,
   "version": "0.1",
   "description": "",
