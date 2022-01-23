@@ -75,6 +75,3 @@ chrome.tabs.onActivated.addListener(function (activeInfo) {
 		});
 });
 
-$('#clickme').onclick(function() {
-    alert("clicked");
-});
